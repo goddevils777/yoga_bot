@@ -1,0 +1,35 @@
+# Секретные файлы
+bot/api/.env
+bot/api/.env.local
+*.env
+*.env.local
+
+# Логи
+*.log
+error.log
+message.log
+
+# Временные файлы
+*.tmp
+*.temp
+
+# Базы данных
+*.sqlite
+*.db
+
+# Composer
+vendor/
+composer.lock
+
+# Node modules
+node_modules/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Admin Panel</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/notifications.css">
+</head>
+<body>
+    <div id="app">
+        <div class="login-container" id="loginForm">
+            <div class="login-form">
+                <h2>Авторизация</h2>
+                <form id="authForm">
+                    <div class="form-group">
+                        <label>Telegram ID</label>
+                        <input type="text" id="telegramId" class="form-control" placeholder="308640904" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Код доступа</label>
+                        <input type="password" id="authCode" class="form-control" placeholder="admin123" required>
+                    </div>
+                    <button type="submit" class="btn">Войти</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="main-container hidden" id="mainApp">
+            <div class="header">
+                <h1>Админ-панель ботов</h1>
+                <div class="user-info">
+                    <span id="userRole"></span>
+                    <button id="logoutBtn" class="btn btn-danger">Выход</button>
+                </div>
+            </div>
+
+            <div class="nav">
+                <button class="nav-btn active" data-section="bots">Боты</button>
+                <button class="nav-btn" data-section="content">Контент</button>
+                <button class="nav-btn" data-section="broadcast">Рассылки</button>
+                <button class="nav-btn" data-section="users">Пользователи</button>
+            </div>
+
+            <div class="content">
+                <div id="bots-section" class="section active">
+                    <h3>Управление ботами</h3>
+                    <button id="addBotBtn" class="btn">Добавить бота</button>
+                    <div id="botsList"></div>
+                </div>
+
+                <div id="content-section" class="section hidden">
+                    <h3>Управление контентом</h3>
+                    <div id="contentEditor"></div>
+                </div>
+
+                <div id="broadcast-section" class="section hidden">
+                    <h3>Рассылки</h3>
+                    <button id="createBroadcastBtn" class="btn">Новая рассылка</button>
+                    <div id="broadcastList"></div>
+                </div>
+
+                <div id="users-section" class="section hidden">
+                    <h3>Пользователи</h3>
+                    <div id="usersList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипты в самом конце -->
+    <script src="assets/js/notifications.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
