@@ -8,7 +8,7 @@ ini_set('error_log', 'error.log');
 //https://api.telegram.org/bot7706921145:AAEz3J6R001wWuFTEYQ6k4u3_9G1seqyN4k/setWebhook?url=https://bot.yoga-hub.club/bots/telegram/helpme_yhc_bot/app.php
 //https://api.telegram.org/bot7706921145:AAEz3J6R001wWuFTEYQ6k4u3_9G1seqyN4k/deleteWebhook
 //getWebhookInfo
-require_once '/home/ej359436/yoga-hub.club/bot/api/config.php';
+require_once __DIR__ . '/../../../api/config.php';
 
 $telegram_api_bot = Config::getTelegramApiKey();
 $report_id = Config::getReportId();
@@ -47,15 +47,16 @@ function sendMessage($method, $response){
         return false;
     }
 
-    $response = json_decode($res, true);
+    $response_decoded = json_decode($res, true);
 
-    if ($http_code != 200 || !isset($response['ok']) || !$response['ok']) {
-        $error_msg = isset($response['description']) ? $response['description'] : 'Unknown error';
-        file_put_contents(APPATH.'/bots/telegram/'.BOTLOGIN.'/error.log', date('Y-m-d H:i:s') . " Response Api Error: " . $error_msg . "\n", FILE_APPEND);
+    if ($http_code != 200 || !isset($response_decoded['ok']) || !$response_decoded['ok']) {
+        $error_msg = isset($response_decoded['description']) ? $response_decoded['description'] : 'Unknown error';
+        $error_full = "HTTP: $http_code | Error: $error_msg | Full Response: " . $res;
+        file_put_contents(APPATH.'/bots/telegram/'.BOTLOGIN.'/error.log', date('Y-m-d H:i:s') . " " . $error_full . "\n", FILE_APPEND);
         return false;
     }
  
-    return $response;
+    return $response_decoded;
 }
 
 function logError($error) {

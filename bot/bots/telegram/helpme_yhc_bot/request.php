@@ -47,7 +47,6 @@ if (!empty($message['text']) && $message['text'][0] !== '/' && $user['bot_action
     userDialog($client, $user, $message);
     exit();
 }
-
 switch($command){
     case '/test':
         sendMessage('sendMessage', [
@@ -56,53 +55,117 @@ switch($command){
             'parse_mode' => 'HTML'
         ]);
         break;
+        
     case '/start':
-        startBot($message);
-        sleep(2);
-        primaryMenuMessage($message);
+        $user = userData($message);
+        if(!$user){
+            // Регистрируем нового пользователя
+            $database = Config::getDatabase();
+            $database->insert("users", [
+                "telegram_id" => $message['from_id'],
+                "first_name" => $message['first_name'],
+                "last_name" => $message['last_name'],
+                "username" => $message['username'],
+                "role" => "guest",
+            ]);
+        }
+        
+        getContentFromDB('start_message', $message);
+        sleep(1);
+        getContentFromDB('primary_menu', $message);
         break;
+        
     case '/menu':
-        primaryMenuMessage($message);
+        getContentFromDB('primary_menu', $message);
         break;
+        
     case '/programs':
-    case '/developing_programs'://Развивающие программы
-        developingProgramsMessage($message);
+    case '/developing_programs':
+        getContentFromDB('developing_programs', $message);
         break;
+        
     case '/onlineyoga':
-    case '/online_yoga'://Йога с нами онлайн
-        onlineYogaMessage($message);
+    case '/online_yoga':
+        getContentFromDB('online_yoga', $message);
         break;
+        
     case '/retreats':
-    case '/tours_and_retreats'://Туры и ретриты
-        toursAndRetreatsMessage($message);
+    case '/tours_and_retreats':
+        getContentFromDB('tours_and_retreats', $message);
         break;
+        
     case '/detox':
-    case '/detox_programs'://Детокс программы
-        detoxProgramsMessage($message);
+    case '/detox_programs':
+        getContentFromDB('detox_programs', $message);
         break;
-    case '/aroma_diagnostics'://Аромадиагностика
-    case '/successful_year'://Мой успешный год
-    case '/longevity_foundation'://Фундамент долголетия
-    case '/inner_support'://Внутренняя опора
-    case '/vipassana_online'://Випассана онлайн
-    case '/kids_yoga'://Играем в йогу
-    case '/live_yoga'://Йога онлайн
-    case '/our_learning_platform'://Наша обучающая платформа
-    case '/light_detox'://Легкий Детокс
-    case '/detox_3days'://Детокс программа голодание 3 дня
-    case '/detox_7days'://Детокс программа голодание 7 дней
-    case '/tours_calendar'://Календарь туров
-    case '/thailand_retreat'://Йога-ретрит в Таиланде
-    case '/bali_retreat'://Йога-ретрит на Бали
-    case '/nepal_tour'://Тур в Непал
-    case '/japan_zen_tour'://Тур в Японию
-    case '/kailas_tour'://Духовный тур на Кайлас
-    case '/free_classes'://Бесплатные занятия
-    case '/dharma_code'://Дхарма код //Астролог Roman Teos
+        
+    case '/aroma_diagnostics':
+        getContentFromDB('aroma_diagnostics', $message);
+        break;
+        
+    case '/successful_year':
+        getContentFromDB('successful_year', $message);
+        break;
+        
+    case '/longevity_foundation':
+        getContentFromDB('longevity_foundation', $message);
+        break;
+        
+    case '/inner_support':
+        getContentFromDB('inner_support', $message);
+        break;
+        
+    case '/vipassana_online':
+        getContentFromDB('vipassana_online', $message);
+        break;
+        
+    case '/kids_yoga':
+        getContentFromDB('kids_yoga', $message);
+        break;
+        
+    case '/live_yoga':
+        getContentFromDB('live_yoga', $message);
+        break;
+        
+    case '/our_learning_platform':
+        getContentFromDB('our_learning_platform', $message);
+        break;
+        
+    case '/light_detox':
+        getContentFromDB('light_detox', $message);
+        break;
+        
+    case '/detox_3days':
+        getContentFromDB('detox_3days', $message);
+        break;
+        
+    case '/detox_7days':
+        getContentFromDB('detox_7days', $message);
+        break;
+        
+    case '/tours_calendar':
+        getContentFromDB('tours_calendar', $message);
+        break;
+        
+    case '/thailand_retreat':
+    case '/bali_retreat':
+    case '/nepal_tour':
+    case '/japan_zen_tour':
+    case '/kailas_tour':
+        // Эти туры пока используют старую функцию, добавим их в БД позже
         contentMessage($message, $command);
         break;
+        
+    case '/free_classes':
+        getContentFromDB('free_classes', $message);
+        break;
+        
+    case '/dharma_code':
+        getContentFromDB('dharma_code', $message);
+        break;
+        
     case '/help':
-    case '/ask_question'://Задать вопрос
+    case '/ask_question':
         askQuestionMessage($message);
         break;
 }

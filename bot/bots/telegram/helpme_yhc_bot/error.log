@@ -4779,3 +4779,75 @@
 2025-09-07 14:26:37 Response Api Error: Forbidden: bot was blocked by the user
 2025-09-07 16:51:15 Response Api Error: Forbidden: bot was blocked by the user
 2025-09-07 22:52:40 Response Api Error: Bad Request: message media can't be edited
+[25-Sep-2025 17:58:42 UTC] PHP Warning:  require_once(/home/ej359436/yoga-hub.club/bot/api/config.php): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 11
+[25-Sep-2025 17:58:42 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/ej359436/yoga-hub.club/bot/api/config.php' (include_path='.:/usr/local/Cellar/php/8.4.12/share/php/pear') in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php:11
+Stack trace:
+#0 {main}
+  thrown in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 11
+[25-Sep-2025 18:00:04 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:00:04 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'yoga_hub_local.users' doesn't exist in /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php:629
+Stack trace:
+#0 /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php(629): PDOStatement->execute()
+#1 /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php(1979): Medoo\Medoo->exec(Object(PDOStatement), Array)
+#2 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/func/userData.php(28): Medoo\Medoo->get('users', Array, Array)
+#3 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/func/startBot.php(11): userData(Array)
+#4 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/request.php(60): startBot(Array)
+#5 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php(72): require_once('/Users/apple/De...')
+#6 {main}
+  thrown in /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php on line 629
+[25-Sep-2025 18:01:13 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:01:13 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'yoga_hub_local.users' doesn't exist in /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php:629
+Stack trace:
+#0 /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php(629): PDOStatement->execute()
+#1 /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php(1979): Medoo\Medoo->exec(Object(PDOStatement), Array)
+#2 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/func/userData.php(28): Medoo\Medoo->get('users', Array, Array)
+#3 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/func/startBot.php(11): userData(Array)
+#4 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/request.php(60): startBot(Array)
+#5 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php(72): require_once('/Users/apple/De...')
+#6 {main}
+  thrown in /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php on line 629
+[25-Sep-2025 18:02:18 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:02:18 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'yoga_hub_local.users' doesn't exist in /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php:629
+Stack trace:
+#0 /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php(629): PDOStatement->execute()
+#1 /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php(1979): Medoo\Medoo->exec(Object(PDOStatement), Array)
+#2 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/func/userData.php(28): Medoo\Medoo->get('users', Array, Array)
+#3 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/func/startBot.php(11): userData(Array)
+#4 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/request.php(60): startBot(Array)
+#5 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php(72): require_once('/Users/apple/De...')
+#6 {main}
+  thrown in /Users/apple/Desktop/prog/Bot-yoga/vendor/catfan/medoo/src/Medoo.php on line 629
+[25-Sep-2025 18:04:07 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:04:11 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:11 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:12 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:04:15 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:15 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:16 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:04:19 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:20 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:20 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:04:23 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:23 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:23 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:04:27 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:27 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:27 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:04:31 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:31 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:31 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:04:35 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:04:35 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:05:29 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:05:32 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:05:33 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:07:28 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:07:31 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:10:07 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 66
+[25-Sep-2025 18:10:10 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 54
+[25-Sep-2025 18:12:35 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/message.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 67
+[25-Sep-2025 18:12:38 UTC] PHP Warning:  file_put_contents(/Users/apple/Desktop/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/error.log): Failed to open stream: No such file or directory in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php on line 55
+2025-09-25 18:15:44 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-25 18:19:15 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-25 18:19:31 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-26 10:26:09 HTTP: 400 | Error: Bad Request: object expected as reply markup | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: object expected as reply markup"}
