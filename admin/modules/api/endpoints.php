@@ -8,8 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-require_once 'BotManager.php';
-require_once '../auth/JWTAuth.php';
+require_once __DIR__ . '/BotManager.php';
+require_once __DIR__ . '/../auth/JWTAuth.php';
 
 $botManager = new BotManager();
 $auth = new JWTAuth();

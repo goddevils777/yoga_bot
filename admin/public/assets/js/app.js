@@ -19,10 +19,16 @@ class App {
         });
     }
 
-    initializeApp() {
+    async initializeApp() {
         this.setupNavigation();
         this.setupEventHandlers();
-        this.loadInitialData();
+
+        // Сначала загружаем данные
+        await this.loadInitialData();
+
+        // Потом восстанавливаем секцию
+        const savedSection = localStorage.getItem('currentSection') || 'bots';
+        await this.switchSection(savedSection);
     }
 
     reinitialize() {
@@ -51,17 +57,29 @@ class App {
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.classList.remove('active');
         });
-        document.querySelector(`[data-section="${section}"]`).classList.add('active');
+
+        const navBtn = document.querySelector(`[data-section="${section}"]`);
+        if (navBtn) {
+            navBtn.classList.add('active');
+        }
 
         // Показываем нужную секцию
         document.querySelectorAll('.section').forEach(sec => {
             sec.classList.remove('active');
             sec.classList.add('hidden');
         });
-        document.getElementById(`${section}-section`).classList.remove('hidden');
-        document.getElementById(`${section}-section`).classList.add('active');
+
+        const sectionElement = document.getElementById(`${section}-section`);
+        if (sectionElement) {
+            sectionElement.classList.remove('hidden');
+            sectionElement.classList.add('active');
+        } else {
+            console.error('Section not found:', section);
+            return;
+        }
 
         this.currentSection = section;
+        localStorage.setItem('currentSection', section);
         await this.loadSectionData(section);
     }
 
@@ -103,14 +121,7 @@ class App {
     }
 
     async loadInitialData() {
-        const loadingId = notifications.loading('Загрузка данных...');
-        try {
-            await this.loadBots();
-            notifications.remove(loadingId);
-        } catch (error) {
-            notifications.remove(loadingId);
-            notifications.error('Ошибка загрузки данных');
-        }
+        await this.loadBots();
     }
 
     async loadBots() {
@@ -289,34 +300,33 @@ class App {
         }
 
         const categories = {
-            'Меню': ['primary_menu', 'start_message'],
+            'Меню': ['start_message', 'primary_menu'],
             'Основные разделы': ['developing_programs', 'online_yoga', 'tours_and_retreats', 'detox_programs'],
-            'Развивающие программы': ['aroma_diagnostics', 'successful_year', 'longevity_foundation', 'inner_support', 'vipassana_online', 'kids_yoga', 'dharma_code'],
-            'Детокс программы': ['light_detox', 'detox_3days', 'detox_7days'],
+            'Развивающие программы': ['aroma_diagnostics', 'successful_year', 'longevity_foundation', 'inner_support', 'vipassana_online', 'kids_yoga', 'dharma_code', 'light_detox'],
             'Йога онлайн': ['live_yoga', 'our_learning_platform', 'free_classes'],
-            'Туры': ['tours_calendar']
+            'Туры': ['tours_calendar', 'thailand_retreat', 'bali_retreat', 'nepal_tour', 'japan_zen_tour', 'kailas_tour'],
+            'Детокс программы': ['detox_3days', 'detox_7days']
         };
-
         let html = '<div class="content-editor-wrapper"><div class="content-categories">';
 
         for (const [categoryName, keys] of Object.entries(categories)) {
             const categoryItems = this.content.filter(item => keys.includes(item.content_key));
             if (categoryItems.length === 0) continue;
 
+            // Проверяем сохраненное состояние категории
+            const isCollapsed = this.getCategoryState(categoryName);
+            const collapsedClass = isCollapsed ? 'collapsed' : '';
+
             html += `
-            <div class="content-category">
-                <div class="category-header" onclick="this.classList.toggle('collapsed'); this.nextElementSibling.classList.toggle('collapsed')">
+                <div class="content-category">
+                    <div class="category-header ${collapsedClass}" onclick="app.toggleCategory(this, '${categoryName}')">
                     <h4 class="category-title">${categoryName} (${categoryItems.length})</h4>
                     <span class="category-toggle">▼</span>
                 </div>
-                <div class="category-body">
+                <div class="category-body ${collapsedClass}">
                     ${categoryItems.map((item, index) => `
-                        <div class="content-item" data-id="${item.id}">
-                            <div class="sort-buttons">
-                                ${index > 0 ? `<button class="btn-sort" onclick="app.moveContent(${item.id}, 'up')">▲</button>` : '<span style="height:24px"></span>'}
-                                ${index < categoryItems.length - 1 ? `<button class="btn-sort" onclick="app.moveContent(${item.id}, 'down')">▼</button>` : ''}
-                            </div>
-                            <div class="content-item-main">
+                            <div class="content-item" data-id="${item.id}">
+                                <div class="content-item-main">
                                 <div class="content-item-header">
                                     <h5>${this.escapeHtml(item.title)}</h5>
                                     <span class="content-status ${item.status}">${item.status === 'active' ? 'Активен' : 'Неактивен'}</span>
@@ -325,7 +335,13 @@ class App {
                                     <p class="content-preview">${this.escapeHtml(item.text?.substring(0, 100) || '')}...</p>
                                 </div>
                                 <div class="content-item-footer">
-                                    <button class="btn btn-sm" onclick="app.editContent(${item.id})">✏️ Редактировать</button>
+                                    <button class="btn btn-sm" onclick="app.editContent(${item.id})">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                        Редактировать
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -363,8 +379,22 @@ class App {
     }
 
     editContent(contentId) {
-        const item = this.content.find(c => c.id === contentId);
-        if (!item) return;
+        console.log('=== EDIT CONTENT DEBUG ===');
+        console.log('Received contentId:', contentId, typeof contentId);
+        console.log('Current content array:', this.content);
+
+        const item = this.content.find(c => {
+            console.log('Comparing:', c.id, typeof c.id, 'with', contentId, typeof contentId);
+            return c.id === parseInt(contentId);
+        });
+
+        console.log('Found item:', item);
+
+        if (!item) {
+            notifications.error('Контент не найден');
+            console.error('Content not found for ID:', contentId);
+            return;
+        }
 
         this.showEditContentModal(item);
     }
@@ -389,30 +419,65 @@ class App {
         // Парсим кнопки из JSON
         let buttons = [];
         try {
-            buttons = item.buttons ? JSON.parse(item.buttons) : [];
+            if (item.buttons) {
+                let buttonsData = item.buttons;
+
+                console.log('Raw buttons from server:', buttonsData);
+
+                // Если это строка - парсим
+                if (typeof buttonsData === 'string') {
+                    // Убираем внешние кавычки если есть
+                    buttonsData = buttonsData.replace(/^"(.*)"$/, '$1');
+                    // Заменяем экранированные слеши
+                    buttonsData = buttonsData.replace(/\\"/g, '"');
+
+                    console.log('After cleanup:', buttonsData);
+
+                    buttons = JSON.parse(buttonsData);
+                } else if (Array.isArray(buttonsData)) {
+                    buttons = buttonsData;
+                }
+            }
+
+            // Проверяем что результат - массив
+            if (!Array.isArray(buttons)) {
+                console.warn('Buttons is not an array after parsing:', buttons);
+                buttons = [];
+            }
         } catch (e) {
+            console.error('Error parsing buttons:', e, item.buttons);
             buttons = [];
         }
+
+        console.log('Final parsed buttons:', buttons);
+
+        // Создаем временный элемент для декодирования HTML-сущностей
+        const decodeHtml = (html) => {
+            const txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            return txt.value;
+        };
 
         const modal = this.createModal('Редактировать контент', `
         <form id="editContentForm">
             <input type="hidden" name="id" value="${item.id}">
+            <input type="hidden" name="content_key" value="${item.content_key}">
             
             <div class="form-group">
                 <label>Заголовок</label>
-                <input type="text" name="title" class="form-control" value="${this.escapeHtml(item.title)}" required>
+                <input type="text" name="title" class="form-control" value="${this.escapeHtml(decodeHtml(item.title))}" required>
             </div>
             
             <div class="form-group">
                 <label>Ключ контента</label>
-                <input type="text" name="content_key" class="form-control" value="${item.content_key}" readonly>
+                <input type="text" class="form-control" value="${item.content_key}" readonly>
             </div>
             
             <div class="form-group">
                 <label>Текст сообщения</label>
-                <textarea name="text" class="form-control" rows="6" required>${this.escapeHtml(item.text || '')}</textarea>
+                <textarea name="text" class="form-control" rows="6" required>${decodeHtml(item.text || '')}</textarea>
             </div>
-            
+        
             <div class="form-group">
                 <label>Кнопки</label>
                 <div id="buttonsContainer">
@@ -443,7 +508,6 @@ class App {
             await this.handleSaveContent(new FormData(e.target));
         });
     }
-
 
     async deleteContentFromModal(contentId) {
         if (!confirm('Удалить этот блок контента? Это действие нельзя отменить.')) return;
@@ -481,51 +545,68 @@ class App {
         document.querySelector(`.button-editor[data-index="${index}"]`)?.remove();
     }
 
-async handleSaveContent(formData) {
-    const submitBtn = document.querySelector('#editContentForm button[type="submit"]');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Сохранение...';
+    async handleSaveContent(formData) {
+        const submitBtn = document.querySelector('#editContentForm button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Сохранение...';
 
-    try {
-        // Собираем кнопки из формы
-        const buttonEditors = document.querySelectorAll('.button-editor');
-        const buttons = [];
-        
-        buttonEditors.forEach(editor => {
-            const text = editor.querySelector('[data-field="text"]').value.trim();
-            const type = editor.querySelector('[data-field="type"]').value;
-            const value = editor.querySelector('[data-field="value"]').value.trim();
-            
-            if (text && value) {
-                if (type === 'url') {
-                    buttons.push({ text, url: value });
-                } else {
-                    buttons.push({ text, callback_data: value });
+        try {
+            // Собираем кнопки из формы
+            const buttonEditors = document.querySelectorAll('.button-editor');
+            const buttons = [];
+
+            buttonEditors.forEach(editor => {
+                const text = editor.querySelector('[data-field="text"]').value.trim();
+                const type = editor.querySelector('[data-field="type"]').value;
+                const value = editor.querySelector('[data-field="value"]').value.trim();
+
+                if (text && value) {
+                    if (type === 'url') {
+                        buttons.push({ text, url: value });
+                    } else {
+                        buttons.push({ text, callback_data: value });
+                    }
                 }
-            }
-        });
+            });
 
-        const data = {
-            title: formData.get('title'),
-            text: formData.get('text'),
-            status: formData.get('status'),
-            buttons: JSON.stringify(buttons)
-        };
+            const data = {
+                title: formData.get('title'),
+                text: formData.get('text'),
+                status: formData.get('status'),
+                buttons: JSON.stringify(buttons)
+            };
 
-        await api.saveContent(this.currentBot.id, formData.get('content_key'), data);
-        notifications.success('Контент сохранён');
-        this.closeModal();
-        await this.loadContent();
-    } catch (error) {
-        notifications.error(`Ошибка сохранения: ${error.message}`);
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Сохранить';
+            await api.saveContent(this.currentBot.id, formData.get('content_key'), data);
+            notifications.success('Контент сохранён');
+            this.closeModal();
+            await this.loadContent();
+        } catch (error) {
+            notifications.error(`Ошибка сохранения: ${error.message}`);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Сохранить';
+        }
     }
-}
 
-    moveContent(contentId, direction) {
-        notifications.info(`Сортировка (сохранение порядка - в разработке)`);
+    toggleCategory(element, categoryName) {
+        element.classList.toggle('collapsed');
+        element.nextElementSibling.classList.toggle('collapsed');
+
+        // Сохраняем состояние
+        const isCollapsed = element.classList.contains('collapsed');
+        this.saveCategoryState(categoryName, isCollapsed);
+    }
+
+    getCategoryState(categoryName) {
+        const states = JSON.parse(localStorage.getItem('categoryStates') || '{}');
+        // По умолчанию все свернуты, кроме "Меню"
+        return states[categoryName] !== undefined ? states[categoryName] : (categoryName !== 'Меню');
+    }
+
+    saveCategoryState(categoryName, isCollapsed) {
+        const states = JSON.parse(localStorage.getItem('categoryStates') || '{}');
+        states[categoryName] = isCollapsed;
+        localStorage.setItem('categoryStates', JSON.stringify(states));
     }
 }
 

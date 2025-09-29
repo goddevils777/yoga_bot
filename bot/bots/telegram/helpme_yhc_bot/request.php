@@ -59,7 +59,6 @@ switch($command){
     case '/start':
         $user = userData($message);
         if(!$user){
-            // Регистрируем нового пользователя
             $database = Config::getDatabase();
             $database->insert("users", [
                 "telegram_id" => $message['from_id'],

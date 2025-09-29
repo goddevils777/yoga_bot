@@ -1,6 +1,6 @@
 class API {
     constructor() {
-        this.baseURL = '/modules/api/endpoints.php';
+        this.baseURL = '/admin/modules/api/endpoints.php';
         this.token = localStorage.getItem('admin_token');
     }
 
@@ -47,8 +47,7 @@ class API {
     // Авторизация
     async login(telegramId, authCode) {
         try {
-            // Используем абсолютный путь от корня сервера
-            const loginUrl = '/modules/auth/login.php';
+            const loginUrl = '/admin/modules/auth/login.php';
             console.log('Sending login request to:', loginUrl);
             console.log('Data:', { telegram_id: telegramId, auth_code: authCode });
 

@@ -1,5 +1,5 @@
 <?php
-require_once '../../core/config/app.php';
+require_once __DIR__ . '/../../core/config/app.php';
 
 class BotManager {
     private $db;
@@ -40,7 +40,10 @@ class BotManager {
             $where['content_key'] = $content_key;
         }
         
-        return $this->db->select('bot_content', '*', $where);
+        return $this->db->select('bot_content', '*', [
+            'AND' => $where,
+            'ORDER' => ['id' => 'ASC']
+        ]);
     }
     
     // Добавить/обновить контент
@@ -55,7 +58,7 @@ class BotManager {
             'text' => $data['text'],
             'media_id' => $data['media_id'] ?? null,
             'media_type' => $data['media_type'] ?? null,
-            'buttons' => json_encode($data['buttons'] ?? [])
+            'buttons' => $data['buttons'] ?? '[]'  // Уже JSON-строка из JS
         ];
         
         if ($existing) {

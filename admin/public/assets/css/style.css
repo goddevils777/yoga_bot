@@ -141,6 +141,7 @@ body {
     color: var(--gray-900);
     font-size: 20px;
     font-weight: 700;
+    text-align: center;
 }
 
 /* Формы */

@@ -7,7 +7,9 @@ class JWTAuth {
         $this->secret_key = 'yoga-bot-admin-secret-key-2024-secure';
         
         // Читаем локальную базу
-        $envFile = __DIR__ . '/../../bot/api/.env.local';
+        // Приоритет: .env.local → .env
+        $envFileLocal = __DIR__ . '/../../../bot/api/.env.local';
+        $envFile = file_exists($envFileLocal) ? $envFileLocal : __DIR__ . '/../../../bot/api/.env';
         $env = $this->loadEnv($envFile);
         
         $dsn = "mysql:host={$env['dbHost']};dbname={$env['dbDatabase']};charset=utf8mb4";

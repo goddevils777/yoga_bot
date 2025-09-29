@@ -1,0 +1,17 @@
+{
+    "name": "yoga-hub/bot-admin",
+    "description": "Yoga Hub Bot Admin Panel",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "vlucas/phpdotenv": "^5.5",
+        "catfan/medoo": "^2.1",
+        "orhanerday/open-ai": "^4.8",
+        "lucadevelop/telegram-entities-decoder": "^1.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
