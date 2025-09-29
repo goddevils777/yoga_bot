@@ -47,7 +47,8 @@ switch ($path[0]) {
         echo json_encode(['error' => 'Endpoint not found']);
 }
 
-function handleBotsAPI($method, $path, $input, $botManager, $user_id) {
+function handleBotsAPI($method, $path, $input, $botManager, $user_id)
+{
     switch ($method) {
         case 'GET':
             if (!$botManager->checkAccess($user_id)) {
@@ -57,7 +58,7 @@ function handleBotsAPI($method, $path, $input, $botManager, $user_id) {
             }
             echo json_encode($botManager->getAllBots());
             break;
-            
+
         case 'POST':
             if (!$botManager->checkAccess($user_id)) {
                 http_response_code(403);
@@ -70,22 +71,23 @@ function handleBotsAPI($method, $path, $input, $botManager, $user_id) {
     }
 }
 
-function handleContentAPI($method, $path, $input, $botManager, $user_id) {
+function handleContentAPI($method, $path, $input, $botManager, $user_id)
+{
     $bot_id = $path[1] ?? null;
     $content_key = $path[2] ?? null;
-    
+
     if (!$bot_id || !$botManager->checkAccess($user_id, $bot_id)) {
         http_response_code(403);
         echo json_encode(['error' => 'Access denied']);
         return;
     }
-    
+
     switch ($method) {
         case 'GET':
             $content = $botManager->getBotContent($bot_id, $content_key);
             echo json_encode($content);
             break;
-            
+
         case 'POST':
         case 'PUT':
             if (!$content_key) {
@@ -93,27 +95,39 @@ function handleContentAPI($method, $path, $input, $botManager, $user_id) {
                 echo json_encode(['error' => 'Content key required']);
                 return;
             }
+
+            // Добавляем media_id и media_type если переданы
+            if (isset($input['media_id'])) {
+                // Ничего не делаем, просто передаём в saveContent
+            }
+
+            // Если явно передан null - удаляем изображение
+            if (array_key_exists('media_id', $input) && $input['media_id'] === null) {
+                $input['media_id'] = null;
+                $input['media_type'] = null;
+            }
+
             $id = $botManager->saveContent($bot_id, $content_key, $input);
             echo json_encode(['id' => $id, 'status' => 'saved']);
             break;
     }
 }
 
-function handleBroadcastAPI($method, $path, $input, $botManager, $user_id) {
+function handleBroadcastAPI($method, $path, $input, $botManager, $user_id)
+{
     if ($method !== 'POST') {
         http_response_code(405);
         echo json_encode(['error' => 'Method not allowed']);
         return;
     }
-    
+
     $bot_id = $input['bot_id'] ?? null;
     if (!$bot_id || !$botManager->checkAccess($user_id, $bot_id)) {
         http_response_code(403);
         echo json_encode(['error' => 'Access denied']);
         return;
     }
-    
+
     // TODO: Implement broadcast logic
     echo json_encode(['status' => 'broadcast_queued', 'recipients' => 0]);
 }
-?>

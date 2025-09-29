@@ -26,6 +26,12 @@ if (preg_match('#^/modules/api/endpoints\.php(/.*)?$#', $uri, $matches)) {
     exit;
 }
 
+// Если это upload endpoint
+if (preg_match('#^/modules/api/upload\.php$#', $uri)) {
+    require __DIR__ . '/../modules/api/upload.php';
+    exit;
+}
+
 // Если это auth endpoint
 if (preg_match('#^/modules/auth/login\.php$#', $uri)) {
     require __DIR__ . '/../modules/auth/login.php';

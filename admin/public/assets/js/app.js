@@ -485,6 +485,26 @@ class App {
                 </div>
                 <button type="button" class="btn btn-sm btn-secondary" onclick="app.addButton()">+ Добавить кнопку</button>
             </div>
+
+            <div class="form-group">
+                <label>Изображение</label>
+                
+                <div id="imagePreviewContainer" style="margin: 10px 0; display: ${item.media_id ? 'block' : 'none'}; position: relative;">
+                    <img id="imagePreview" src="" style="max-width: 100%; border-radius: 8px; border: 2px dashed #cbd5e1; padding: 4px;" />
+                    <button type="button" class="remove-image-btn" onclick="app.removeImagePreview(${item.id})" title="Удалить изображение">×</button>
+                </div>
+                
+                <label for="mediaInput" class="file-upload-label">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Выбрать изображение
+                </label>
+                <input type="file" id="mediaInput" name="media" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp" style="display: none;" onchange="app.previewImage(event)">
+                <small class="form-text">Макс. размер: 10 МБ. Форматы: JPG, PNG, GIF, WebP</small>
+            </div>
             
             <div class="form-group">
                 <label>Статус</label>
@@ -503,6 +523,19 @@ class App {
         </form>
     `);
 
+        // Если есть media_id - показываем текущее изображение
+        if (item.media_id) {
+            setTimeout(() => {
+                const preview = document.getElementById('imagePreview');
+                const container = document.getElementById('imagePreviewContainer');
+
+                if (preview && container) {
+                    preview.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="400" height="200" fill="%23f3f4f6"/><text x="50%" y="50%" text-anchor="middle" fill="%236b7280" font-size="16">Изображение загружено</text></svg>';
+                    container.style.display = 'block';
+                }
+            }, 100);
+        }
+
         modal.querySelector('#editContentForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             await this.handleSaveContent(new FormData(e.target));
@@ -514,6 +547,100 @@ class App {
 
         this.closeModal();
         await this.deleteContent(contentId);
+    }
+
+    async removeImage(contentId) {
+        if (!confirm('Удалить изображение из этого контента?')) return;
+
+        try {
+            const content = this.content.find(c => c.id === contentId);
+            if (!content) {
+                notifications.error('Контент не найден');
+                return;
+            }
+
+            await api.saveContent(this.currentBot.id, content.content_key, {
+                id: contentId,
+                media_id: null,
+                media_type: null
+            });
+
+            notifications.success('Изображение удалено');
+            await this.loadContent();
+            this.closeModal();
+        } catch (error) {
+            notifications.error('Ошибка удаления изображения');
+        }
+    }
+
+    previewImage(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        const container = document.getElementById('imagePreviewContainer');
+
+        if (file) {
+            // Проверка размера
+            const maxSize = 10 * 1024 * 1024;
+            if (file.size > maxSize) {
+                notifications.error('Файл слишком большой. Максимум 10 МБ');
+                event.target.value = '';
+                container.style.display = 'none';
+                return;
+            }
+
+            // Проверка типа
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                notifications.error('Недопустимый формат. Используйте JPG, PNG, GIF или WebP');
+                event.target.value = '';
+                container.style.display = 'none';
+                return;
+            }
+
+            // Показываем превью
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                container.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            container.style.display = 'none';
+        }
+    }
+
+    async removeImagePreview(contentId) {
+        if (!confirm('Удалить изображение из этого контента?')) return;
+
+        try {
+            const content = this.content.find(c => c.id === contentId);
+            if (!content) {
+                notifications.error('Контент не найден');
+                return;
+            }
+
+            await api.saveContent(this.currentBot.id, content.content_key, {
+                id: contentId,
+                title: content.title,
+                text: content.text,
+                status: content.status,
+                buttons: content.buttons,
+                media_id: null,
+                media_type: null
+            });
+
+            notifications.success('Изображение удалено');
+
+            // Скрываем превью
+            const container = document.getElementById('imagePreviewContainer');
+            if (container) {
+                container.style.display = 'none';
+            }
+
+            await this.loadContent();
+        } catch (error) {
+            notifications.error('Ошибка удаления изображения');
+        }
     }
 
     renderButtonEditor(btn, index) {
@@ -551,6 +678,31 @@ class App {
         submitBtn.textContent = 'Сохранение...';
 
         try {
+            // Проверяем, загружено ли новое изображение
+            const mediaFile = formData.get('media');
+            let mediaData = {};
+
+            if (mediaFile && mediaFile.size > 0) {
+                // Валидация файла
+                const maxSize = 10 * 1024 * 1024; // 10 MB
+                if (mediaFile.size > maxSize) {
+                    notifications.error('Файл слишком большой. Максимум 10 МБ');
+                    return;
+                }
+
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                if (!allowedTypes.includes(mediaFile.type)) {
+                    notifications.error('Недопустимый формат файла. Используйте JPG, PNG, GIF или WebP');
+                    return;
+                }
+
+                // Загружаем изображение
+                notifications.info('Загрузка изображения...');
+                const uploadResult = await api.uploadMedia(mediaFile, this.currentBot.id);
+                mediaData.media_id = uploadResult.file_id;
+                mediaData.media_type = 'photo';
+            }
+
             // Собираем кнопки из формы
             const buttonEditors = document.querySelectorAll('.button-editor');
             const buttons = [];
@@ -570,16 +722,20 @@ class App {
             });
 
             const data = {
+                id: formData.get('id'),
                 title: formData.get('title'),
                 text: formData.get('text'),
                 status: formData.get('status'),
-                buttons: JSON.stringify(buttons)
+                buttons: JSON.stringify(buttons),
+                ...mediaData
             };
+
+            console.log('Saving content with data:', data);
 
             await api.saveContent(this.currentBot.id, formData.get('content_key'), data);
             notifications.success('Контент сохранён');
-            this.closeModal();
             await this.loadContent();
+            this.closeModal();
         } catch (error) {
             notifications.error(`Ошибка сохранения: ${error.message}`);
         } finally {

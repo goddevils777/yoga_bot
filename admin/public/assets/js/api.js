@@ -187,7 +187,7 @@ class API {
         formData.append('bot_id', botId);
 
         try {
-            const response = await fetch('../modules/api/upload.php', {
+            const response = await fetch('/admin/modules/api/upload.php', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${this.token}`
@@ -198,9 +198,10 @@ class API {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.error || 'Upload failed');
+                console.error('Upload failed:', data);
+                throw new Error(data.error + (data.details ? ': ' + JSON.stringify(data.details) : ''));
             }
-
+            
             return data;
         } catch (error) {
             console.error('Upload error:', error);

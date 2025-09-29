@@ -541,3 +541,95 @@ body {
     word-break: break-all;
 }
 
+
+/* Кастомная кнопка загрузки файла */
+.form-group .file-upload-label {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 18px;
+    background: #6366f1;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: background 0.2s ease;
+    border: none;
+    user-select: none;
+    margin: 0;
+}
+
+.form-group .file-upload-label:hover {
+    background: #4f46e5;
+}
+
+.form-group .file-upload-label svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
+}
+/* Контейнер превью изображения */
+#imagePreviewContainer {
+    animation: fadeIn 0.3s ease;
+    padding: 10px;
+    background: #f9fafb;
+    border-radius: 8px;
+}
+
+#imagePreview {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+
+/* Контейнер превью с крестиком */
+#imagePreviewContainer {
+    animation: fadeIn 0.3s ease;
+    position: relative;
+}
+
+#imagePreview {
+    border: 2px dashed #cbd5e1 !important;
+    padding: 8px;
+    background: #f9fafb;
+}
+
+/* Кнопка удаления изображения (крестик) */
+.remove-image-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    background: #ef4444;
+    color: white;
+    border: 2px solid white;
+    border-radius: 6px;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    padding: 0;
+    font-weight: 300;
+}
+
+.remove-image-btn:hover {
+    background: #dc2626;
+    transform: scale(1.1);
+}
+
+.remove-image-btn:active {
+    transform: scale(0.95);
+}
