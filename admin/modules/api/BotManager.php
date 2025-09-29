@@ -62,7 +62,7 @@ class BotManager
         $content_data = [
             'title' => $data['title'],
             'text' => $data['text'],
-            'buttons' => $data['buttons'] ?? '[]'
+            'buttons' => is_string($data['buttons']) ? $data['buttons'] : json_encode($data['buttons'])
         ];
 
         error_log("SaveContent DEBUG - Received data: " . json_encode($data));

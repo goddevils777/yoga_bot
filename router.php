@@ -48,8 +48,14 @@ if ($uri === '/admin/modules/api/upload.php') {
     exit;
 }
 
+// API get media
+if ($uri === '/admin/modules/api/get_media.php') {
+    require __DIR__ . '/admin/modules/api/get_media.php';
+    exit;
+}
+
 // Webhook бота
-if ($uri === '/bot/bots/telegram/helpme_yhc_bot/app.php') {
+if ($uri === '/bots/telegram/helpme_yhc_bot/app.php') {
     require __DIR__ . '/bot/bots/telegram/helpme_yhc_bot/app.php';
     exit;
 }

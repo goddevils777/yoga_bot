@@ -475,7 +475,7 @@ class App {
             
             <div class="form-group">
                 <label>Текст сообщения</label>
-                <textarea name="text" class="form-control" rows="6" required>${decodeHtml(item.text || '')}</textarea>
+                <textarea name="text" class="form-control" rows="17" required>${decodeHtml(item.text || '')}</textarea>
             </div>
         
             <div class="form-group">
@@ -515,7 +515,15 @@ class App {
             </div>
             
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" onclick="app.deleteContentFromModal(${item.id})">🗑 Удалить блок</button>
+                <button type="button" class="btn btn-danger" onclick="app.deleteContentFromModal(${item.id})">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                    Удалить блок
+                </button>
                 <div style="flex: 1"></div>
                 <button type="button" class="btn btn-secondary" onclick="app.closeModal()">Отмена</button>
                 <button type="submit" class="btn btn-primary">Сохранить</button>
@@ -528,9 +536,8 @@ class App {
             setTimeout(() => {
                 const preview = document.getElementById('imagePreview');
                 const container = document.getElementById('imagePreviewContainer');
-
                 if (preview && container) {
-                    preview.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="400" height="200" fill="%23f3f4f6"/><text x="50%" y="50%" text-anchor="middle" fill="%236b7280" font-size="16">Изображение загружено</text></svg>';
+                    preview.src = `/admin/modules/api/get_media.php?file_id=${item.media_id}`;
                     container.style.display = 'block';
                 }
             }, 100);
@@ -608,9 +615,15 @@ class App {
             container.style.display = 'none';
         }
     }
-
     async removeImagePreview(contentId) {
-        if (!confirm('Удалить изображение из этого контента?')) return;
+        const confirmed = await this.showConfirmModal(
+            'Удалить изображение?',
+            'Вы уверены что хотите удалить это изображение? Это действие нельзя отменить.',
+            'Удалить',
+            'danger'
+        );
+
+        if (!confirmed) return;
 
         try {
             const content = this.content.find(c => c.id === contentId);
@@ -631,7 +644,6 @@ class App {
 
             notifications.success('Изображение удалено');
 
-            // Скрываем превью
             const container = document.getElementById('imagePreviewContainer');
             if (container) {
                 container.style.display = 'none';
@@ -763,6 +775,47 @@ class App {
         const states = JSON.parse(localStorage.getItem('categoryStates') || '{}');
         states[categoryName] = isCollapsed;
         localStorage.setItem('categoryStates', JSON.stringify(states));
+    }
+
+    showConfirmModal(title, message, confirmText = 'Подтвердить', type = 'primary') {
+        return new Promise((resolve) => {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.innerHTML = `
+            <div class="modal" style="max-width: 420px; width: 90%;">
+                <div class="modal-header">
+                    <h3>${title}</h3>
+                </div>
+                <div class="modal-body" style="padding: 20px;">
+                    <p style="font-size: 14px; color: #475569; line-height: 1.6; margin: 0 0 20px 0;">${message}</p>
+                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Отмена</button>
+                        <button type="button" class="btn btn-${type}" id="confirmBtn">${confirmText}</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            document.body.appendChild(overlay);
+
+            overlay.querySelector('#confirmBtn').onclick = () => {
+                overlay.remove();
+                resolve(true);
+            };
+
+            overlay.querySelector('#cancelBtn').onclick = () => {
+                overlay.remove();
+                resolve(false);
+            };
+
+            // Закрытие по клику на фон
+            overlay.onclick = (e) => {
+                if (e.target === overlay) {
+                    overlay.remove();
+                    resolve(false);
+                }
+            };
+        });
     }
 }
 
