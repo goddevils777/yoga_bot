@@ -66,12 +66,10 @@ class App {
         // Показываем нужную секцию
         document.querySelectorAll('.section').forEach(sec => {
             sec.classList.remove('active');
-            sec.classList.add('hidden');
         });
 
-        const sectionElement = document.getElementById(`${section}-section`);
+        const sectionElement = document.getElementById(section);
         if (sectionElement) {
-            sectionElement.classList.remove('hidden');
             sectionElement.classList.add('active');
         } else {
             console.error('Section not found:', section);
@@ -168,10 +166,12 @@ class App {
     `;
     }
 
-    selectBot(botId) {
+    async selectBot(botId) {
         this.currentBot = this.bots.find(bot => bot.id === botId);
         this.renderBots(); // Перерендерим для обновления активного состояния
         notifications.info(`Выбран бот: ${this.currentBot.name}`);
+
+        await this.loadContent();
     }
 
     showAddBotModal() {
@@ -468,8 +468,12 @@ class App {
     }
 
     async loadUsers() {
-        // Заглушка для пользователей  
-        document.getElementById('usersList').innerHTML = '<p>Управление пользователями (в разработке)</p>';
+        if (!this.currentBot) {
+            notifications.error('Сначала выберите бота');
+            return;
+        }
+
+        await usersManager.init(this.currentBot.id);
     }
 
     editContent(contentId) {

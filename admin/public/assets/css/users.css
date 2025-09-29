@@ -1,0 +1,254 @@
+/* === МОДУЛЬ ПОЛЬЗОВАТЕЛЕЙ === */
+
+/* Контейнер фильтров */
+.users-filters {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.filters-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-group label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+
+.filter-input {
+    padding: 10px 14px;
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Быстрые фильтры по дате */
+.quick-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.quick-filter-btn {
+    padding: 8px 16px;
+    background: var(--gray-100);
+    color: var(--gray-700);
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quick-filter-btn:hover {
+    background: var(--gray-200);
+}
+
+.quick-filter-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Статистика */
+.users-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--gray-600);
+}
+
+.stat-card.total .stat-value {
+    color: var(--primary);
+}
+
+.stat-card.active .stat-value {
+    color: var(--success);
+}
+
+.stat-card.blocked .stat-value {
+    color: var(--danger);
+}
+
+/* Таблица пользователей */
+.users-table-container {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-table thead {
+    background: var(--gray-50);
+}
+
+.users-table th {
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--gray-700);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--gray-200);
+    cursor: pointer;
+    user-select: none;
+}
+
+.users-table th:hover {
+    background: var(--gray-100);
+}
+
+.users-table th.sortable::after {
+    content: ' ⇅';
+    opacity: 0.3;
+}
+
+.users-table th.sort-asc::after {
+    content: ' ↑';
+    opacity: 1;
+}
+
+.users-table th.sort-desc::after {
+    content: ' ↓';
+    opacity: 1;
+}
+
+.users-table td {
+    padding: 16px;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 14px;
+}
+
+.users-table tbody tr {
+    transition: background 0.2s;
+}
+
+.users-table tbody tr:hover {
+    background: var(--gray-50);
+}
+
+/* Статус пользователя */
+.user-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.user-status.active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.user-status.blocked {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Роль пользователя */
+.user-role {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.user-role.admin {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.user-role.guest {
+    background: var(--gray-100);
+    color: var(--gray-700);
+}
+
+/* Telegram ID с копированием */
+.telegram-id {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.copy-btn {
+    padding: 4px 8px;
+    background: var(--gray-100);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background: var(--gray-200);
+}
+
+/* Действия с пользователем */
+.user-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Пустое состояние */
+.users-empty {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--gray-500);
+}
+
+.users-empty svg {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}

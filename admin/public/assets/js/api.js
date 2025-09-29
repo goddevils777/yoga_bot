@@ -30,7 +30,11 @@ class API {
                 throw new Error('Unauthorized');
             }
 
-            const data = await response.json();
+            // Отладка
+            const textResponse = await response.text();
+            console.log('Raw response:', textResponse);
+            const data = JSON.parse(textResponse);
+
 
             if (!response.ok) {
                 throw new Error(data.error || 'Request failed');
@@ -161,20 +165,26 @@ class API {
         return this.request(`users?${params}`);
     }
 
-    async blockUser(botId, userId, reason = '') {
+    async blockUser(botId, telegramId, reason = '') {
         return this.request(`users/block`, {
             method: 'POST',
-            body: { bot_id: botId, user_id: userId, reason }
+            body: { bot_id: botId, telegram_id: telegramId, reason }
         });
     }
 
-    async unblockUser(botId, userId) {
+    async unblockUser(botId, telegramId) {
         return this.request(`users/unblock`, {
             method: 'POST',
-            body: { bot_id: botId, user_id: userId }
+            body: { bot_id: botId, telegram_id: telegramId }
         });
     }
 
+    async deleteUser(telegramId) {
+        return this.request(`users/delete`, {
+            method: 'POST',
+            body: { telegram_id: telegramId }
+        });
+    }
     // Статистика
     async getStats(botId, period = '30d') {
         return this.request(`stats/${botId}?period=${period}`);
@@ -201,7 +211,7 @@ class API {
                 console.error('Upload failed:', data);
                 throw new Error(data.error + (data.details ? ': ' + JSON.stringify(data.details) : ''));
             }
-            
+
             return data;
         } catch (error) {
             console.error('Upload error:', error);

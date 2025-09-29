@@ -1,18 +1,20 @@
 <?php
-class DatabaseMigrations {
+class DatabaseMigrations
+{
     private $pdo;
-    
-    public function __construct() {
+
+    public function __construct()
+    {
         // Читаем локальный .env файл
         $envFile = __DIR__ . '/../../../bot/api/.env.local';
         if (!file_exists($envFile)) {
             throw new Exception(".env.local file not found! Create it first.");
         }
-        
+
         $env = $this->loadEnv($envFile);
-        
+
         echo "Подключаюсь к БД: {$env['dbHost']}:{$env['dbDatabase']}\n";
-        
+
         // Подключаемся к БД через PDO
         $dsn = "mysql:host={$env['dbHost']};dbname={$env['dbDatabase']};charset=utf8mb4";
         try {
@@ -25,8 +27,9 @@ class DatabaseMigrations {
             throw new Exception("DB Connection failed: " . $e->getMessage());
         }
     }
-    
-    private function loadEnv($file) {
+
+    private function loadEnv($file)
+    {
         $env = [];
         if (file_exists($file)) {
             $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -43,9 +46,10 @@ class DatabaseMigrations {
     }
 
     // Остальные методы остаются теми же...
-    public function createTables() {
+    public function createTables()
+    {
         echo "Создаю таблицы для админ-панели...\n";
-        
+
         // Таблица ботов
         $this->pdo->exec("CREATE TABLE IF NOT EXISTS bots (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -57,7 +61,7 @@ class DatabaseMigrations {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )");
         echo "✅ Таблица bots создана\n";
-        
+
         // Таблица админов
         $this->pdo->exec("CREATE TABLE IF NOT EXISTS admins (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -69,7 +73,7 @@ class DatabaseMigrations {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )");
         echo "✅ Таблица admins создана\n";
-        
+
         // Таблица контента
         $this->pdo->exec("CREATE TABLE IF NOT EXISTS bot_content (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -85,7 +89,7 @@ class DatabaseMigrations {
             INDEX idx_bot_content (bot_id, content_key)
         )");
         echo "✅ Таблица bot_content создана\n";
-        
+
         // Таблица рассылок
         $this->pdo->exec("CREATE TABLE IF NOT EXISTS broadcasts (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -104,7 +108,7 @@ class DatabaseMigrations {
             INDEX idx_bot_broadcasts (bot_id)
         )");
         echo "✅ Таблица broadcasts создана\n";
-        
+
         // Таблица действий в группах
         $this->pdo->exec("CREATE TABLE IF NOT EXISTS group_actions (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -117,18 +121,33 @@ class DatabaseMigrations {
             INDEX idx_group_actions (bot_id, target_id)
         )");
         echo "✅ Таблица group_actions создана\n";
-        
+
+        // Таблица логов действий с пользователями
+        $this->pdo->exec("CREATE TABLE IF NOT EXISTS user_actions_log (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            bot_id INT NOT NULL,
+            telegram_id BIGINT NOT NULL,
+            action ENUM('block', 'unblock', 'delete') NOT NULL,
+            reason VARCHAR(500),
+            admin_id BIGINT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX idx_user_actions (bot_id, telegram_id),
+            INDEX idx_action_date (created_at)
+        )");
+                echo "✅ Таблица user_actions_log создана\n";
+
         // Добавим первого бота
         $this->insertDefaultBot();
-        
+
         echo "\n🎉 Все таблицы созданы успешно!\n";
     }
-    
-    private function insertDefaultBot() {
+
+    private function insertDefaultBot()
+    {
         // Проверим есть ли боты
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM bots");
         $count = $stmt->fetchColumn();
-        
+
         if ($count == 0) {
             $stmt = $this->pdo->prepare("INSERT INTO bots (name, token, webhook_url, theme) VALUES (?, ?, ?, ?)");
             $stmt->execute([
@@ -141,4 +160,3 @@ class DatabaseMigrations {
         }
     }
 }
-?>
