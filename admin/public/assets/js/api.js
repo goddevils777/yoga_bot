@@ -1,6 +1,6 @@
 class API {
     constructor() {
-        this.baseURL = '../modules/api/endpoints.php';
+        this.baseURL = '/modules/api/endpoints.php';
         this.token = localStorage.getItem('admin_token');
     }
 

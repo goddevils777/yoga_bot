@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bot Admin Panel</title>
+    <title>YOGA-Bot Admin Panel</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/content.css">
     <link rel="stylesheet" href="assets/css/notifications.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧘</text></svg>">
 </head>
+
 <body>
     <div id="app">
         <div class="login-container" id="loginForm">
@@ -28,7 +32,7 @@
 
         <div class="main-container hidden" id="mainApp">
             <div class="header">
-                <h1>Админ-панель ботов</h1>
+                <h1>Админ-панель YOGA-bot 🧘</h1>
                 <div class="user-info">
                     <span id="userRole"></span>
                     <button id="logoutBtn" class="btn btn-danger">Выход</button>
@@ -36,17 +40,19 @@
             </div>
 
             <div class="nav">
-                <button class="nav-btn active" data-section="bots">Боты</button>
+                <button class="nav-btn active" data-section="bots">Настройки</button>
                 <button class="nav-btn" data-section="content">Контент</button>
                 <button class="nav-btn" data-section="broadcast">Рассылки</button>
                 <button class="nav-btn" data-section="users">Пользователи</button>
+                <button class="nav-btn" data-section="openai">OpenAI</button>
             </div>
 
             <div class="content">
                 <div id="bots-section" class="section active">
-                    <h3>Управление ботами</h3>
-                    <button id="addBotBtn" class="btn">Добавить бота</button>
-                    <div id="botsList"></div>
+                    <div class="section-header">
+                        <h3>Настройки бота</h3>
+                    </div>
+                    <div id="botSettings"></div>
                 </div>
 
                 <div id="content-section" class="section hidden">
@@ -74,4 +80,5 @@
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
+
 </html>

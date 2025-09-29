@@ -1,0 +1,84 @@
+/* === КОНТЕНТ - Список и карточки === */
+.content-list {
+    display: grid;
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.content-item {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+}
+
+.content-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+}
+
+.content-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.content-item-header h4 {
+    margin: 0;
+    color: var(--gray-900);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.content-status {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.content-status.active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.content-status.inactive {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.content-item-body {
+    margin-bottom: 16px;
+}
+
+.content-key {
+    font-size: 13px;
+    color: var(--gray-600);
+    margin-bottom: 8px;
+}
+
+.content-key code {
+    background: var(--gray-100);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--primary);
+}
+
+.content-preview {
+    color: var(--gray-700);
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.content-item-footer {
+    display: flex;
+    gap: 8px;
+}

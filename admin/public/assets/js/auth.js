@@ -5,7 +5,7 @@ class Auth {
         this.authForm = document.getElementById('authForm');
         this.logoutBtn = document.getElementById('logoutBtn');
         this.userRoleSpan = document.getElementById('userRole');
-        
+
         this.init();
     }
 
@@ -36,7 +36,7 @@ class Auth {
         const role = api.getUserRole();
         const roleNames = {
             'owner': 'Владелец',
-            'admin': 'Администратор', 
+            'admin': 'Администратор',
             'manager': 'Менеджер'
         };
         this.userRoleSpan.textContent = roleNames[role] || role;
@@ -44,7 +44,7 @@ class Auth {
 
     async handleLogin(e) {
         e.preventDefault();
-        
+
         const telegramId = document.getElementById('telegramId').value.trim();
         const authCode = document.getElementById('authCode').value.trim();
         const submitBtn = this.authForm.querySelector('button[type="submit"]');
@@ -75,6 +75,11 @@ class Auth {
             notifications.success('Успешная авторизация');
             this.showMainApp();
             this.authForm.reset();
+
+            // Загружаем данные после входа
+            if (window.app) {
+                await window.app.reinitialize();
+            }
         } catch (error) {
             notifications.remove(loadingNotif);
             notifications.error(error.message || 'Ошибка авторизации');
@@ -94,17 +99,17 @@ class Auth {
 
     hasPermission(action, botId = null) {
         const role = api.getUserRole();
-        
+
         switch (role) {
             case 'owner':
                 return true;
-                
+
             case 'admin':
                 return action !== 'manage_admins';
-                
+
             case 'manager':
                 return ['view_users', 'block_users', 'create_broadcast', 'view_content'].includes(action);
-                
+
             default:
                 return false;
         }
