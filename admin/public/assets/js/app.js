@@ -332,7 +332,7 @@ class App {
                                     <span class="content-status ${item.status}">${item.status === 'active' ? 'Активен' : 'Неактивен'}</span>
                                 </div>
                                 <div class="content-item-body">
-                                    <p class="content-preview">${this.escapeHtml(item.text?.substring(0, 100) || '')}...</p>
+                                    <p class="content-preview">${this.stripHtmlTags(item.text || 'Нет текста')}...</p>
                                 </div>
                                 <div class="content-item-footer">
                                     <button class="btn btn-sm" onclick="app.editContent(${item.id})">
@@ -366,6 +366,100 @@ class App {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    stripHtmlTags(text) {
+        if (!text) return '';
+
+        // Замінюємо HTML-теги на читабельний текст
+        return text
+            .replace(/<b>(.*?)<\/b>/g, '$1')      // Видаляємо жирний
+            .replace(/<i>(.*?)<\/i>/g, '$1')      // Видаляємо курсив
+            .replace(/<code>(.*?)<\/code>/g, '$1') // Видаляємо код
+            .replace(/<br\s*\/?>/gi, '\n')        // Переноси рядків
+            .replace(/\\n/g, '\n')                // Екрановані переноси
+            .replace(/<[^>]*>/g, '')              // Видаляємо всі інші теги
+            .substring(0, 150);                   // Обрізаємо до 150 символів
+    }
+
+    formatText(fieldId, format) {
+        const textarea = document.getElementById(fieldId + 'Content');
+        if (!textarea) return;
+
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = textarea.value.substring(start, end);
+
+        if (!selectedText) {
+            alert('Выделите текст для форматирования');
+            return;
+        }
+
+        let formattedText = '';
+
+        switch (format) {
+            case 'bold':
+                formattedText = `<b>${selectedText}</b>`;
+                break;
+            case 'italic':
+                formattedText = `<i>${selectedText}</i>`;
+                break;
+        }
+
+        // Вставляємо відформатований текст
+        const newText = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+        textarea.value = newText;
+
+        // Встановлюємо курсор після вставленого тексту
+        const newCursorPos = start + formattedText.length;
+        textarea.setSelectionRange(newCursorPos, newCursorPos);
+        textarea.focus();
+    }
+
+    setupAutoSave(formId) {
+        const form = document.getElementById(formId);
+        if (!form) return;
+
+        const fields = form.querySelectorAll('input[name], textarea[name], select[name]');
+        const contentKey = form.querySelector('[name="content_key"]')?.value;
+
+        if (!contentKey) return;
+
+        const storageKey = `autosave_${contentKey}`;
+
+        // Завантажуємо збережені дані
+        const savedData = localStorage.getItem(storageKey);
+        if (savedData) {
+            try {
+                const data = JSON.parse(savedData);
+                fields.forEach(field => {
+                    if (data[field.name] && field.name !== 'id' && field.name !== 'content_key') {
+                        field.value = data[field.name];
+                    }
+                });
+                notifications.info('Восстановлены несохраненные изменения', 2000);
+            } catch (e) {
+                console.error('Error loading autosave:', e);
+            }
+        }
+
+        // Автозбереження при вводі
+        fields.forEach(field => {
+            field.addEventListener('input', () => {
+                const formData = {};
+                fields.forEach(f => {
+                    formData[f.name] = f.value;
+                });
+                localStorage.setItem(storageKey, JSON.stringify(formData));
+            });
+        });
+
+        // Очищення автозбереження після успішного збереження
+        form.addEventListener('submit', () => {
+            setTimeout(() => {
+                localStorage.removeItem(storageKey);
+            }, 1000);
+        });
     }
 
     async loadBroadcasts() {
@@ -426,14 +520,17 @@ class App {
 
                 // Если это строка - парсим
                 if (typeof buttonsData === 'string') {
-                    // Убираем внешние кавычки если есть
-                    buttonsData = buttonsData.replace(/^"(.*)"$/, '$1');
-                    // Заменяем экранированные слеши
-                    buttonsData = buttonsData.replace(/\\"/g, '"');
+                    // Спочатку пробуємо парсити як є
+                    try {
+                        buttons = JSON.parse(buttonsData);
+                    } catch (e) {
+                        // Якщо не вийшло - очищуємо і пробуємо знову
+                        buttonsData = buttonsData.replace(/^"(.*)"$/, '$1');
+                        buttonsData = buttonsData.replace(/\\"/g, '"');
+                        buttons = JSON.parse(buttonsData);
+                    }
 
                     console.log('After cleanup:', buttonsData);
-
-                    buttons = JSON.parse(buttonsData);
                 } else if (Array.isArray(buttonsData)) {
                     buttons = buttonsData;
                 }
@@ -475,7 +572,15 @@ class App {
             
             <div class="form-group">
                 <label>Текст сообщения</label>
-                <textarea name="text" class="form-control" rows="17" required>${decodeHtml(item.text || '')}</textarea>
+                <div style="margin-bottom: 8px; display: flex; gap: 8px;">
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="app.formatText('text', 'bold')" title="Жирный текст">
+                        <strong>Ж</strong>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="app.formatText('text', 'italic')" title="Курсив">
+                        <em>К</em>
+                    </button>
+                </div>
+                <textarea id="textContent" name="text" class="form-control" rows="17" required>${decodeHtml(item.text || '')}</textarea>
             </div>
         
             <div class="form-group">
@@ -547,6 +652,11 @@ class App {
             e.preventDefault();
             await this.handleSaveContent(new FormData(e.target));
         });
+
+        // Запускаємо автозбереження
+        setTimeout(() => {
+            this.setupAutoSave('editContentForm');
+        }, 100);
     }
 
     async deleteContentFromModal(contentId) {

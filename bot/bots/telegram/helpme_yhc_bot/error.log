@@ -4957,3 +4957,15 @@ Stack trace:
 #1 /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/app.php(73): require_once('/Users/apple/De...')
 #2 {main}
   thrown in /Users/apple/Desktop/prog/Bot-yoga/bot/bots/telegram/helpme_yhc_bot/func/getContentFromDB.php on line 59
+2025-09-29 18:17:31 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-29 18:34:25 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-29 18:34:42 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-29 18:35:57 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-29 18:36:54 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-29 18:37:12 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-29 18:37:46 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-29 18:37:52 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-29 18:38:08 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-29 18:40:25 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-29 18:40:32 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
+2025-09-29 18:40:44 HTTP: 400 | Error: Bad Request: wrong file identifier/HTTP URL specified | Full Response: {"ok":false,"error_code":400,"description":"Bad Request: wrong file identifier/HTTP URL specified"}
